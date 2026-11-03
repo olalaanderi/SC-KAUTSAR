@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Class Kautsar - E-Learning SMK Kautsar</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- SheetJS (xlsx) for e-Rapor Excel Export -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Main Device / Desktop Frame Container -->
+  <div class="app-viewport">
+    <div id="app" class="app-container">
+
+      <!-- ================= HEADER UNIVERSAL ================= -->
+      <header id="app-header" class="app-header">
+        <div class="header-content">
+          <div class="header-left">
+            <button id="btn-back" class="icon-btn" aria-label="Kembali" style="display: none;">
+              <i class="ri-arrow-left-s-line"></i>
+            </button>
+            <div class="brand-info">
+              <div class="brand-avatar-badge">
+                <i class="ri-graduation-cap-fill"></i>
+              </div>
+              <div class="brand-text">
+                <span class="brand-title">Smart Class</span>
+                <span class="brand-sub">SMK KAUTSAR</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="header-right">
+            <div id="user-role-badge" class="role-pill student-badge" style="display: none;">
+              <span class="dot"></span>
+              <span id="role-pill-text">SISWA</span>
+            </div>
+            <button id="btn-logout" class="icon-btn danger-hover" aria-label="Keluar" title="Keluar Akun" style="display: none;">
+              <i class="ri-logout-box-r-line"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- ================= MAIN SCROLLABLE BODY ================= -->
+      <main id="app-main" class="app-main">
+
+        <!-- ================= SCREEN 1: LOGIN (SISWA & GURU) ================= -->
+        <section id="view-login" class="view-screen active">
+          <div class="login-wrapper">
+            <!-- Brand Banner -->
+            <div class="brand-hero-card">
+              <div class="school-logo-emblem">
+                <i class="ri-school-line"></i>
+              </div>
+              <h1 class="hero-title">SMART CLASS KAUTSAR</h1>
+              <p class="hero-subtitle">Portal Pembelajaran & Kejuruan Digital SMK Terpadu Kautsar</p>
+            </div>
+
+            <!-- Auth Form Card -->
+            <div class="surface-card auth-card">
+              <!-- Segmented Role Switcher -->
+              <div class="role-segmented-control" role="tablist">
+                <button type="button" class="segment-tab active" data-role="siswa" id="tab-role-siswa">
+                  <i class="ri-user-smile-line"></i> SISWA
+                </button>
+                <button type="button" class="segment-tab" data-role="guru" id="tab-role-guru">
+                  <i class="ri-user-star-line"></i> GURU
+                </button>
+              </div>
+
+              <!-- Quick Demo Autofill Helpers -->
+              <div class="demo-credential-box">
+                <span class="demo-label"><i class="ri-flashlight-line"></i> Klik akun demo untuk isi cepat:</span>
+                <div class="demo-buttons">
+                  <button type="button" class="btn-demo" id="btn-demo-siswa">Demo Siswa (TKJ)</button>
+                  <button type="button" class="btn-demo" id="btn-demo-guru">Demo Guru</button>
+                </div>
+              </div>
+
+              <!-- Main Auth Form -->
+              <form id="form-login" class="auth-form" autocomplete="off">
+                <div class="form-group">
+                  <label for="input-identifier" id="label-identifier">NISN / ID Siswa</label>
+                  <div class="input-icon-wrap">
+                    <i class="ri-id-card-line"></i>
+                    <input type="text" id="input-identifier" placeholder="Contoh: 12345" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input-password">Kata Sandi</label>
+                  <div class="input-icon-wrap">
+                    <i class="ri-lock-line"></i>
+                    <input type="password" id="input-password" placeholder="Masukkan kata sandi..." required>
+                    <button type="button" class="toggle-password" id="btn-toggle-pwd" aria-label="Tampilkan sandi">
+                      <i class="ri-eye-line"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-row-between">
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="check-remember" checked>
+                    <span class="checkmark"></span>
+                    Ingat Sesi Saya
+                  </label>
+                  <a href="#" class="link-muted" id="link-forgot-pwd">Lupa Akses?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-submit-login">
+                  <span>MASUK SEKARANG</span>
+                  <i class="ri-arrow-right-line"></i>
+                </button>
+              </form>
+
+              <!-- Quick Help & Info Banner -->
+              <div class="help-info-banner">
+                <i class="ri-information-line"></i>
+                <div class="help-info-text">
+                  <strong>Pusat Bantuan Akademik</strong>
+                  <span>Kredensial login diberikan oleh operator kurikulum sekolah.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campus Facility Preview Snapshot -->
+            <div class="campus-preview-card">
+              <div class="facility-header">
+                <i class="ri-award-line"></i>
+                <span>Standar Fasilitas Lab Industri SMK Kautsar</span>
+              </div>
+              <div class="facility-tags">
+                <span class="tag"><i class="ri-wifi-line"></i> Lab Fiber Optic</span>
+                <span class="tag"><i class="ri-tools-line"></i> Bengkel Otomotif EFI</span>
+                <span class="tag"><i class="ri-computer-line"></i> Lab Akuntansi Komputer</span>
+              </div>
+            </div>
+
+            <!-- Footer Notes -->
+            <footer class="app-footer">
+              <p>&copy; 2026 SMK Kautsar - Sistem Manajemen Pembelajaran Terpadu</p>
+            </footer>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 2A: DASHBOARD SISWA ================= -->
+        <section id="view-student-home" class="view-screen">
+          <div class="dashboard-wrapper">
+            <!-- Student Profile Header Card -->
+            <div class="student-profile-card">
+              <div class="profile-info-row">
+                <div class="user-avatar-circle">
+                  <span id="student-avatar-initial">AF</span>
+                </div>
+                <div class="user-details">
+                  <span class="greeting-text">Selamat Belajar,</span>
+                  <h2 id="student-name-display" class="user-name">Ahmad Fauzi</h2>
+                  <div class="user-meta-chips">
+                    <span class="meta-chip"><i class="ri-barcode-line"></i> NISN: <strong id="student-nisn-display">12345</strong></span>
+                    <span class="meta-chip active-chip"><i class="ri-building-line"></i> <span id="student-jurusan-display">TKJ</span> - <span id="student-kelas-display">Kelas 12</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Motivational Learning Micro-card -->
+            <div class="learning-tip-card">
+              <div class="tip-icon">
+                <i class="ri-lightbulb-flash-line"></i>
+              </div>
+              <div class="tip-content">
+                <strong>Tips Praktikum Minggu Ini</strong>
+                <p>Pastikan file laporan crimping kabel UTP telah disusun dalam format PDF dengan ukuran di bawah 10MB.</p>
+              </div>
+            </div>
+
+            <!-- Section Title -->
+            <div class="section-heading">
+              <h3>Menu Utama Pembelajaran</h3>
+              <span class="badge-count">2 Pilihan</span>
+            </div>
+
+            <!-- 2 Main Student Action Cards (Mata Pelajaran vs Kumpul Tugas) -->
+            <div class="student-action-grid">
+              <!-- Card 1: Mata Pelajaran -->
+              <div class="action-card primary-theme" id="btn-nav-student-materi">
+                <div class="card-icon-bubble">
+                  <i class="ri-book-read-line"></i>
+                </div>
+                <div class="card-texts">
+                  <h4>MATA PELAJARAN</h4>
+                  <p>Akses modul bacaan teori, jobsheet praktikum, dan video kejuruan.</p>
+                </div>
+                <div class="card-action-bar">
+                  <span class="action-text">Buka Materi & Modul</span>
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </div>
+
+              <!-- Card 2: Kumpul Tugas -->
+              <div class="action-card accent-theme" id="btn-nav-student-tugas">
+                <div class="card-icon-bubble">
+                  <i class="ri-file-upload-line"></i>
+                </div>
+                <div class="card-texts">
+                  <h4>KUMPUL TUGAS</h4>
+                  <p>Unggah lembar kerja tugas teori & laporan praktikum tepat waktu.</p>
+                </div>
+                <div class="card-action-bar">
+                  <span class="action-text">Kirim Tugas Praktik</span>
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Summary of active tasks for Student -->
+            <div class="active-tasks-preview">
+              <div class="tasks-preview-header">
+                <h4><i class="ri-time-line"></i> Tenggat Tugas Mendatang</h4>
+              </div>
+              <div id="student-upcoming-tasks-list" class="mini-task-list">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 2B: DASHBOARD GURU ================= -->
+        <section id="view-teacher-home" class="view-screen">
+          <div class="dashboard-wrapper">
+            <!-- Teacher Greeting Header -->
+            <div class="teacher-profile-card">
+              <div class="profile-info-row">
+                <div class="user-avatar-circle teacher-circle">
+                  <span>HG</span>
+                </div>
+                <div class="user-details">
+                  <span class="greeting-text">Portal Pengajar & Pembina,</span>
+                  <h2 id="teacher-name-display" class="user-name">Bpk. Hendra Gunawan, S.Kom</h2>
+                  <div class="user-meta-chips">
+                    <span class="meta-chip"><i class="ri-id-card-fill"></i> NIP/ID: <strong id="teacher-id-display">guru01</strong></span>
+                    <span class="meta-chip teacher-chip"><i class="ri-bookmark-3-line"></i> Guru Kejuruan TKJ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Announcement Banner -->
+            <div class="announcement-card">
+              <i class="ri-megaphone-line"></i>
+              <div>
+                <strong>Pengumuman Akademik</strong>
+                <p>Batas akhir input rekapitulasi nilai tugas e-Rapor tengah semester: 28 Oktober 2026.</p>
+              </div>
+            </div>
+
+            <!-- Section Title -->
+            <div class="section-heading">
+              <h3>Panel Pengelolaan Guru</h3>
+              <span class="badge-count">3 Fitur</span>
+            </div>
+
+            <!-- 3 Main Teacher Cards -->
+            <div class="teacher-action-stack">
+              <!-- Card 1: Unggah Tugas & Materi -->
+              <div class="action-card-wide" id="btn-nav-guru-upload">
+                <div class="card-left-icon upload-color">
+                  <i class="ri-upload-cloud-2-line"></i>
+                </div>
+                <div class="card-center-info">
+                  <h4>UNGGAH TUGAS & MATERI</h4>
+                  <p>Buat tugas baru, lampirkan modul PDF, dan atur tenggat waktu siswa.</p>
+                </div>
+                <i class="ri-arrow-right-s-line arrow-icon"></i>
+              </div>
+
+              <!-- Card 2: Koreksi Tugas Siswa -->
+              <div class="action-card-wide" id="btn-nav-guru-koreksi">
+                <div class="card-left-icon check-color">
+                  <i class="ri-checkbox-circle-line"></i>
+                </div>
+                <div class="card-center-info">
+                  <h4>KOREKSI TUGAS SISWA</h4>
+                  <p>Periksa berkas kiriman siswa dan berikan penilaian angka 0–100.</p>
+                </div>
+                <i class="ri-arrow-right-s-line arrow-icon"></i>
+              </div>
+
+              <!-- Card 3: Ekspor Nilai e-Rapor -->
+              <div class="action-card-wide" id="btn-nav-guru-rekap">
+                <div class="card-left-icon export-color">
+                  <i class="ri-file-excel-2-line"></i>
+                </div>
+                <div class="card-center-info">
+                  <h4>EKSPOR NILAI E-RAPOR</h4>
+                  <p>Lihat rekap nilai kelas dan unduh langsung berkas Excel (.xlsx).</p>
+                </div>
+                <i class="ri-arrow-right-s-line arrow-icon"></i>
+              </div>
+            </div>
+
+            <!-- Quick Stats Bar -->
+            <div class="stats-card-row">
+              <div class="stat-box">
+                <span class="stat-number" id="stat-total-submissions">14</span>
+                <span class="stat-label">Tugas Dikirim</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number pending-num" id="stat-pending-submissions">5</span>
+                <span class="stat-label">Perlu Dinilai</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number" id="stat-class-average">84.2</span>
+                <span class="stat-label">Rata-rata Nilai</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 3: PILIH JURUSAN ================= -->
+        <section id="view-pilih-jurusan" class="view-screen">
+          <div class="view-container">
+            <div class="view-header-context">
+              <div class="step-indicator">Langkah 1 dari 2</div>
+              <h2 class="view-title">Pilih Program Keahlian</h2>
+              <p class="view-sub" id="pilih-jurusan-context-desc">Tentukan program keahlian untuk melanjutkan pembelajaran.</p>
+            </div>
+
+            <!-- 2x2 Vocational Department Cards Grid -->
+            <div class="departments-grid">
+              <!-- TKJ -->
+              <div class="department-card" data-jurusan="TKJ">
+                <div class="dept-badge badge-tkj">TEKNIK INFORMATIKA</div>
+                <div class="dept-icon-wrapper tkj-theme">
+                  <i class="ri-router-line"></i>
+                </div>
+                <h3 class="dept-code">TKJ</h3>
+                <h4 class="dept-title">Teknik Komputer & Jaringan</h4>
+                <p class="dept-desc">Administrasi server, mikrotik, fiber optic, & perakitan sistem jaringan komputer.</p>
+                <div class="dept-footer">
+                  <span>Pilih Jurusan</span>
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </div>
+
+              <!-- TKR -->
+              <div class="department-card" data-jurusan="TKR">
+                <div class="dept-badge badge-tkr">OTOMOTIF</div>
+                <div class="dept-icon-wrapper tkr-theme">
+                  <i class="ri-roadster-line"></i>
+                </div>
+                <h3 class="dept-code">TKR</h3>
+                <h4 class="dept-title">Teknik Kendaraan Ringan</h4>
+                <p class="dept-desc">Sistem injeksi EFI, transmisi kelistrikan mobil, & servis mesin otomotif modern.</p>
+                <div class="dept-footer">
+                  <span>Pilih Jurusan</span>
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </div>
+
+              <!-- TBSM -->
+              <div class="department-card" data-jurusan="TBSM">
+                <div class="dept-badge badge-tbsm">SEPEDA MOTOR</div>
+                <div class="dept-icon-wrapper tbsm-theme">
+                  <i class="ri-motorbike-line"></i>
+                </div>
+                <h3 class="dept-code">TBSM</h3>
+                <h4 class="dept-title">Teknik Sepeda Motor</h4>
+                <p class="dept-desc">Troubleshooting mesin injeksi PGM-FI, chasis suspensi, & tune-up motor berstandar industri.</p>
+                <div class="dept-footer">
+                  <span>Pilih Jurusan</span>
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </div>
+
+              <!-- AKUN -->
+              <div class="department-card" data-jurusan="AKUN">
+                <div class="dept-badge badge-akun">BISNIS & KEUANGAN</div>
+                <div class="dept-icon-wrapper akun-theme">
+                  <i class="ri-calculator-line"></i>
+                </div>
+                <h3 class="dept-code">AKUN</h3>
+                <h4 class="dept-title">Akuntansi & Keuangan</h4>
+                <p class="dept-desc">Pembukuan digital spreadsheet, audit keuangan, & perpajakan lembaga usaha.</p>
+                <div class="dept-footer">
+                  <span>Pilih Jurusan</span>
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 4: PILIH KELAS ================= -->
+        <section id="view-pilih-kelas" class="view-screen">
+          <div class="view-container">
+            <div class="view-header-context">
+              <div class="step-indicator">Langkah 2 dari 2</div>
+              <h2 class="view-title">Pilih Tingkatan Kelas</h2>
+              <div class="context-pill">
+                <span class="context-label">Jurusan Terpilih:</span>
+                <strong id="selected-jurusan-badge" class="dept-pill-active">TKJ</strong>
+              </div>
+            </div>
+
+            <!-- List of Classes -->
+            <div class="classes-vertical-stack">
+              <!-- Kelas 10 -->
+              <div class="class-card" data-kelas="10">
+                <div class="class-number-badge">10</div>
+                <div class="class-info">
+                  <h3>Kelas 10 (Fase E)</h3>
+                  <p>Dasar-dasar program keahlian kejuruan dan keselamatan kerja (K3LH).</p>
+                  <div class="class-tags">
+                    <span class="sub-tag">6 Modul</span>
+                    <span class="sub-tag">3 Tugas</span>
+                  </div>
+                </div>
+                <i class="ri-arrow-right-s-line arrow-class"></i>
+              </div>
+
+              <!-- Kelas 11 -->
+              <div class="class-card" data-kelas="11">
+                <div class="class-number-badge">11</div>
+                <div class="class-info">
+                  <h3>Kelas 11 (Fase F - Awal)</h3>
+                  <p>Pendalaman materi konsentrasi keahlian & praktikum bengkel lab.</p>
+                  <div class="class-tags">
+                    <span class="sub-tag">8 Modul</span>
+                    <span class="sub-tag">4 Tugas</span>
+                  </div>
+                </div>
+                <i class="ri-arrow-right-s-line arrow-class"></i>
+              </div>
+
+              <!-- Kelas 12 -->
+              <div class="class-card" data-kelas="12">
+                <div class="class-number-badge">12</div>
+                <div class="class-info">
+                  <h3>Kelas 12 (Fase F - Lanjutan)</h3>
+                  <p>Praktik kerja industri (PKL), proyek uji kompetensi keahlian (UKK).</p>
+                  <div class="class-tags">
+                    <span class="sub-tag">10 Modul</span>
+                    <span class="sub-tag">5 Tugas</span>
+                  </div>
+                </div>
+                <i class="ri-arrow-right-s-line arrow-class"></i>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 5A: DAFTAR MATERI SISWA ================= -->
+        <section id="view-materi-list" class="view-screen">
+          <div class="view-container">
+            <!-- Header Context Banner -->
+            <div class="top-info-banner">
+              <div>
+                <span class="banner-sub">Materi Pembelajaran</span>
+                <h3 id="materi-context-heading">TKJ - Kelas 12</h3>
+              </div>
+              <span class="badge-accent-soft" id="materi-count-badge">4 Modul</span>
+            </div>
+
+            <!-- Live Search Bar -->
+            <div class="search-bar-wrap">
+              <i class="ri-search-line search-icon"></i>
+              <input type="text" id="input-search-materi" placeholder="Cari modul, jobsheet, atau topik video...">
+              <button type="button" id="btn-clear-search" class="clear-icon" style="display: none;">
+                <i class="ri-close-circle-fill"></i>
+              </button>
+            </div>
+
+            <!-- Tablist Kategori Materi -->
+            <div class="tablist-segmented" role="tablist">
+              <button type="button" class="tab-item active" data-filter="all">Semua Format</button>
+              <button type="button" class="tab-item" data-filter="pdf"><i class="ri-file-pdf-line"></i> Modul PDF</button>
+              <button type="button" class="tab-item" data-filter="video"><i class="ri-video-line"></i> Video Praktik</button>
+            </div>
+
+            <!-- Container List of Materials -->
+            <div id="materials-container" class="materials-stack">
+              <!-- Dynamically populated via JavaScript -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 5B: FORM PENGUMPULAN TUGAS SISWA ================= -->
+        <section id="view-kumpul-tugas" class="view-screen">
+          <div class="view-container">
+            <!-- Assignment Selector Dropdown if multiple -->
+            <div class="form-group mb-3">
+              <label for="select-assignment-item">Pilih Tugas Yang Ingin Dikumpulkan:</label>
+              <select id="select-assignment-item" class="form-select">
+                <!-- Injected via JavaScript -->
+              </select>
+            </div>
+
+            <!-- Assignment Meta Detail Card -->
+            <div class="surface-card assignment-meta-card">
+              <div class="meta-header">
+                <span class="deadline-badge" id="task-deadline-badge"><i class="ri-time-line"></i> Batas: 26 Okt 2026</span>
+                <span class="status-badge status-unsubmitted" id="task-status-pill">Belum Dikirim</span>
+              </div>
+              <h2 id="task-title-display" class="task-title">Tugas 1: Laporan Praktik Crimping Kabel UTP & Konfigurasi Switch</h2>
+              <p id="task-desc-display" class="task-description">
+                Susun laporan praktikum meliputi langkah pengupasan jaket kabel, urutan warna T568B, hasil tes LAN Tester, dan dokumentasi foto proses.
+              </p>
+              
+              <div class="task-criteria-info">
+                <span><i class="ri-attachment-line"></i> Format Didukung: PDF, DOCX, ZIP</span>
+                <span><i class="ri-hard-drive-2-line"></i> Maksimal File: 10 MB</span>
+              </div>
+            </div>
+
+            <!-- Assignment Upload Form -->
+            <form id="form-submit-task" class="upload-form">
+              <div class="form-group">
+                <label>Unggah Berkas Laporan Praktikum <span class="required">*</span></label>
+                <!-- Drag and drop zone -->
+                <div id="dropzone-tugas" class="upload-dropzone">
+                  <input type="file" id="file-input-tugas" accept=".pdf,.docx,.zip" style="display: none;">
+                  <div class="dropzone-content" id="dropzone-prompt">
+                    <div class="upload-cloud-icon">
+                      <i class="ri-upload-cloud-fill"></i>
+                    </div>
+                    <h4>Seret & Lepas Berkas Di Sini</h4>
+                    <p>atau <span class="browse-link">Jelajahi Berkas Dokumen</span> dari perangkat</p>
+                    <span class="file-rule">Format .pdf, .docx, .zip (Maks. 10MB)</span>
+                  </div>
+
+                  <!-- File Preview after selection -->
+                  <div class="file-preview-card" id="file-preview-box" style="display: none;">
+                    <div class="file-icon-type">
+                      <i class="ri-file-pdf-fill" id="preview-file-icon"></i>
+                    </div>
+                    <div class="file-info-col">
+                      <span class="preview-filename" id="preview-file-name">laporan_crimping_ahmad.pdf</span>
+                      <span class="preview-filesize" id="preview-file-size">2.4 MB</span>
+                    </div>
+                    <button type="button" class="btn-remove-file" id="btn-remove-file" title="Ganti Berkas">
+                      <i class="ri-delete-bin-line"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="input-task-notes">Catatan Tambahan Untuk Guru (Opsional):</label>
+                <textarea id="input-task-notes" rows="3" placeholder="Tuliskan catatan khusus atau kendala praktikum jika ada..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-send-task">
+                <i class="ri-send-plane-fill"></i>
+                <span>KIRIM TUGAS SEKARANG →</span>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 6A: FORM UNGGAH TUGAS & MATERI GURU ================= -->
+        <section id="view-guru-upload" class="view-screen">
+          <div class="view-container">
+            <div class="view-header-context">
+              <h2 class="view-title">Publikasikan Materi & Tugas Baru</h2>
+              <div class="context-pill">
+                <span class="context-label">Target:</span>
+                <strong id="guru-upload-target-badge" class="dept-pill-active">TKJ - Kelas 12</strong>
+              </div>
+            </div>
+
+            <form id="form-guru-new-task" class="surface-card teacher-form">
+              <div class="form-group">
+                <label for="guru-input-type">Tipe Konten Pembelajaran <span class="required">*</span></label>
+                <select id="guru-input-type" class="form-select" required>
+                  <option value="tugas">Penugasan Praktik / Lembar Kerja Siswa (LKS)</option>
+                  <option value="modul">Modul Materi Teori (PDF)</option>
+                  <option value="video">Video Pembelajaran Praktik</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="guru-input-title">Judul Tugas / Materi <span class="required">*</span></label>
+                <input type="text" id="guru-input-title" placeholder="Contoh: Praktik 3: Routing Dinamis OSPF" required>
+              </div>
+
+              <div class="form-group" id="group-guru-deadline">
+                <label for="guru-input-deadline">Tenggat Waktu Pengumpulan (Deadline) <span class="required">*</span></label>
+                <input type="datetime-local" id="guru-input-deadline">
+              </div>
+
+              <div class="form-group">
+                <label for="guru-input-desc">Deskripsi & Petunjuk Praktikum <span class="required">*</span></label>
+                <textarea id="guru-input-desc" rows="4" placeholder="Tulis instruksi lengkap, alat bahan, serta kriteria penilaian..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Lampiran Modul / Panduan (Maks. 25MB)</label>
+                <div class="upload-dropzone dropzone-mini" id="dropzone-guru">
+                  <input type="file" id="file-input-guru" style="display: none;">
+                  <div class="dropzone-content" id="dropzone-guru-prompt">
+                    <i class="ri-file-upload-line"></i>
+                    <p>Pilih file lampiran modul (PDF/DOCX/MP4/ZIP)</p>
+                  </div>
+                  <div class="file-preview-card" id="file-preview-guru" style="display: none;">
+                    <i class="ri-attachment-2"></i>
+                    <span id="preview-guru-filename" class="preview-filename">file.pdf</span>
+                    <button type="button" id="btn-remove-guru-file" class="btn-remove-file"><i class="ri-close-line"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-lg">
+                <i class="ri-check-line"></i>
+                <span>PUBLIKASIKAN SEKARANG →</span>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 6B: KOREKSI TUGAS SISWA (GURU) ================= -->
+        <section id="view-guru-koreksi" class="view-screen">
+          <div class="view-container">
+            <!-- Assignment context header -->
+            <div class="surface-card assignment-grading-header">
+              <div class="badge-row">
+                <span class="dept-pill-active" id="grading-context-jurusan">TKJ - Kelas 12</span>
+                <span class="badge-accent-soft" id="grading-total-submissions">Total: 8 Siswa</span>
+              </div>
+              <h3 id="grading-assignment-title" class="grading-title">Tugas 1: Laporan Praktik Crimping UTP</h3>
+              <p class="grading-desc">Silakan periksa berkas lampiran siswa dan input nilai pada rentang 0 hingga 100.</p>
+            </div>
+
+            <!-- Segmented Filter Status -->
+            <div class="tablist-segmented" role="tablist">
+              <button type="button" class="tab-item active" data-grade-filter="all">Semua Siswa</button>
+              <button type="button" class="tab-item" data-grade-filter="pending">Perlu Koreksi</button>
+              <button type="button" class="tab-item" data-grade-filter="graded">Sudah Dinilai</button>
+            </div>
+
+            <!-- Submissions list container -->
+            <div id="submissions-list-container" class="submissions-stack">
+              <!-- Dynamically populated via JavaScript -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 6C: REKAP NILAI & EKSPOR E-RAPOR ================= -->
+        <section id="view-guru-rekap" class="view-screen">
+          <div class="view-container pb-sticky">
+            <!-- Metadata context header -->
+            <div class="top-info-banner">
+              <div>
+                <span class="banner-sub">Rekapitulasi Nilai e-Rapor</span>
+                <h3 id="rekap-heading-context">TKJ - Kelas 12</h3>
+                <span class="sub-date">Tahun Ajaran 2026/2027 (Semester Ganjil)</span>
+              </div>
+              <div class="kkm-badge">
+                <span>KKM Sekolah</span>
+                <strong>75.0</strong>
+              </div>
+            </div>
+
+            <!-- Metric Overview Cards -->
+            <div class="metric-cards-grid">
+              <div class="metric-card">
+                <span class="metric-title">Rata-Rata Kelas</span>
+                <span class="metric-val" id="metric-avg-score">84.5</span>
+                <span class="metric-note text-success"><i class="ri-arrow-up-line"></i> Di atas KKM</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-title">Ketuntasan</span>
+                <span class="metric-val" id="metric-pass-rate">90%</span>
+                <span class="metric-note" id="metric-pass-count">9 dari 10 Siswa</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-title">Nilai Tertinggi</span>
+                <span class="metric-val" id="metric-highest-score">96</span>
+                <span class="metric-note" id="metric-highest-name">Ahmad F.</span>
+              </div>
+            </div>
+
+            <!-- Quick Table Search -->
+            <div class="search-bar-wrap my-3">
+              <i class="ri-search-line search-icon"></i>
+              <input type="text" id="input-search-rekap" placeholder="Cari nama siswa atau NISN...">
+            </div>
+
+            <!-- Rapor Data Table -->
+            <div class="surface-card table-responsive-wrap">
+              <table class="rapor-table" id="table-rapor">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>NISN</th>
+                    <th>Nama Siswa</th>
+                    <th>Tugas</th>
+                    <th>Ujian</th>
+                    <th>Akhir</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="table-rapor-body">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Summary Note -->
+            <div class="summary-note-card">
+              <i class="ri-information-fill"></i>
+              <p>Data rekapitulasi nilai ini telah diformat otomatis sesuai template standar sistem <strong>e-Rapor Kemendikbud SMK</strong>.</p>
+            </div>
+          </div>
+
+          <!-- Fixed Bottom Bar for Export CTA -->
+          <div class="fixed-bottom-bar">
+            <button type="button" class="btn btn-success btn-block btn-lg" id="btn-export-excel">
+              <i class="ri-file-excel-2-fill"></i>
+              <span>UNDUH EXCEL E-RAPOR (.XLSX) →</span>
+            </button>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+      <nav id="app-bottom-nav" class="bottom-nav-bar" style="display: none;">
+        <button type="button" class="nav-tab active" data-nav="home" id="nav-btn-home">
+          <i class="ri-home-5-line"></i>
+          <span>Beranda</span>
+        </button>
+        <button type="button" class="nav-tab" data-nav="learning" id="nav-btn-learning">
+          <i class="ri-book-2-line"></i>
+          <span id="nav-text-action">Pelajaran</span>
+        </button>
+        <button type="button" class="nav-tab" data-nav="rekap" id="nav-btn-rekap">
+          <i class="ri-file-chart-line"></i>
+          <span id="nav-text-rekap">Rekap</span>
+        </button>
+        <button type="button" class="nav-tab" data-nav="profile" id="nav-btn-profile">
+          <i class="ri-user-3-line"></i>
+          <span>Profil</span>
+        </button>
+      </nav>
+
+      <!-- ================= MODALS & DRAWERS ================= -->
+
+      <!-- 1. Grading Modal for Teacher -->
+      <div id="modal-grading" class="modal-backdrop" style="display: none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3><i class="ri-edit-circle-line"></i> Form Penilaian Siswa</h3>
+            <button type="button" class="btn-close-modal" id="btn-close-grading">&times;</button>
+          </div>
+          <form id="form-submit-grade" class="modal-body">
+            <div class="student-mini-banner">
+              <div class="avatar-sm" id="grading-modal-avatar">AF</div>
+              <div>
+                <strong id="grading-modal-student-name">Ahmad Fauzi</strong>
+                <span id="grading-modal-student-nisn">NISN: 12345</span>
+              </div>
+            </div>
+
+            <div class="submission-file-inspect">
+              <div class="file-box">
+                <i class="ri-file-pdf-fill"></i>
+                <div class="file-text">
+                  <span id="grading-modal-filename">laporan_crimping_utp.pdf</span>
+                  <span class="size-note">File Terlampir Siswa</span>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline" id="btn-inspect-file">
+                <i class="ri-eye-line"></i> Pratinjau
+              </button>
+            </div>
+
+            <div class="form-group mt-3">
+              <label for="input-grade-numeric">Input Nilai Tugas (Rentang 0 - 100) <span class="required">*</span></label>
+              <div class="grade-input-box">
+                <input type="number" id="input-grade-numeric" min="0" max="100" placeholder="85" required>
+                <span class="grade-unit">/ 100</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-grade-feedback">Catatan Evaluasi / Umpan Balik Guru:</label>
+              <textarea id="input-grade-feedback" rows="3" placeholder="Contoh: Laporan sangat rapi, urutan T568B tepat. Pertahankan kerapian crimping kabelnya!"></textarea>
+            </div>
+
+            <div class="modal-actions">
+              <button type="button" class="btn btn-secondary" id="btn-cancel-grading">Batal</button>
+              <button type="submit" class="btn btn-primary" id="btn-save-grade">
+                <i class="ri-save-line"></i> Simpan Nilai
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 2. Video Player Modal for Students -->
+      <div id="modal-video" class="modal-backdrop" style="display: none;">
+        <div class="modal-card video-modal-card">
+          <div class="modal-header">
+            <h3 id="video-modal-title"><i class="ri-film-line"></i> Video Praktik Kejuruan</h3>
+            <button type="button" class="btn-close-modal" id="btn-close-video">&times;</button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="video-mock-player">
+              <div class="video-overlay-placeholder">
+                <i class="ri-play-circle-fill play-big-icon"></i>
+                <h4 id="video-mock-heading">Tutorial Crimping Kabel LAN UTP Cat 6</h4>
+                <p>Durasi: 12 Menit | Instruktur: Bpk. Hendra Gunawan, S.Kom</p>
+                <span class="stream-badge"><i class="ri-broadcast-line"></i> Streaming Server Lokal SMK Kautsar</span>
+              </div>
+            </div>
+            <div class="video-details-padding">
+              <p id="video-modal-desc">Pelajari teknik pengelupasan outer jacket, pelurusan urutan warna standar TIA/EIA 568-B, serta pengujian menggunakan Digital Cable Tester.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Notification Container -->
+      <div id="toast-container" class="toast-container"></div>
+
+    </div>
+  </div>
+
+  <!-- Custom JavaScript Logic -->
+  <script src="main.js"></script>
+</body>
+</html>
